@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include <quaternion.h>
+#include "quaternion.h"
 #include <vrpn/vrpn_Connection.h>
 #include <vrpn/vrpn_Tracker.h>
 #include <assert.h>
@@ -53,8 +53,6 @@ void VRPN_CALLBACK handle_data (void *, const vrpn_TRACKERCB t) {
 }
 
 int main (void) {
-
-  test_operations();
 
   return 0;
 }
