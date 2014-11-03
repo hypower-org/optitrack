@@ -1,9 +1,9 @@
-CC=gcc
+CC=g++
 CFLAGS=-c -Wall
-LDFLAGS=-I ./ -lm
+LDFLAGS=-I ./ -lm -L ./vrpn/pc_linux64 -lvrpn -lvrpnserver -lpthread
 SOURCES=quaternion.C optitrack_driver.C
 TESTSOURCES=quaternion.C test.C 
-OBJECTS=$(SOURCES:.cpp=.o)
+OBJECTS=$(SOURCES:.cpp=.o) 
 TESTOBJECTS=$(TESTSOURCES:.cpp=.o)
 EXECUTABLE=od
 
