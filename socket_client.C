@@ -6,11 +6,14 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h> 
+#include <socket_client.h>
 
 //#################### SOCKET CLIENT #############################
 
 /*
   Paul Glotfelter
+
+  11/02/2014
   
   A socket "client."  Intended to interface with a Java TCP server. 
   All of the functions have built-in error checking.
@@ -23,7 +26,7 @@
 
 /* Error 
 
-   Calls 'perror' with the message then exits the program
+   Calls 'perror' with the message then exits the program.
 */
 
 void error(const char *msg) {
@@ -35,17 +38,17 @@ void error(const char *msg) {
 //################################################################
 
 
-int connect(char * hostname, int port) {
+int conn(char * hostname, int port) {
 
   int socketfd;
 
   struct sockaddr_in serv_addr;
   struct hostent *server;
 
-  sockfd = socket(AF_INET, SOCK_STREAM, 0);
+  socketfd = socket(AF_INET, SOCK_STREAM, 0);
 
   //Ensure that host can be connected to...
-  if (sockfd < 0) {
+  if (socketfd < 0) {
     error("ERROR opening socket");
   }
 
@@ -62,16 +65,16 @@ int connect(char * hostname, int port) {
   bzero((char *) &serv_addr, sizeof(serv_addr));
   serv_addr.sin_family = AF_INET;
   bcopy((char *)server->h_addr, (char *) &serv_addr.sin_addr.s_addr, server->h_length);
-  serv_addr.sin_port = htons(portno);
+  serv_addr.sin_port = htons(port);
 
-  if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+  if (connect(socketfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
     error("ERROR connecting");
   }
 
-  return sockfd;
+  return socketfd;
 }
 
-int disconnect(int socketfd) {
+int disconn(int socketfd) {
 
   return close(socketfd);
 }
@@ -87,6 +90,7 @@ int send(int socketfd, char * message) {
   return e;
 }
 
+//REMOVE THIS
 
 /*
 int main(int argc, char *argv[]) {
@@ -155,6 +159,8 @@ int main(int argc, char *argv[]) {
 
 */
 
+
+/*
 int main(int argc, char * argv[]) {
 
   if (argc < 3) {
@@ -162,17 +168,18 @@ int main(int argc, char * argv[]) {
     exit(0);
   }
 
-  int port = atoi(argv[1]);
-  char * hostname = argv[2];
+  char * hostname = argv[1];
+  int port = atoi(argv[2]);
 
-  int socketfd = connect(hostname, port);
+  int socketfd = conn(hostname, port);
   
   char * msg = "How are you?";
 
   send(socketfd, msg);
 
-  disconnect(socketfd);
+  disconn(socketfd);
 
   return 0;
 }
 
+*/
