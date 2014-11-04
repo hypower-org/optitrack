@@ -38,6 +38,11 @@ void error(const char *msg) {
 //################################################################
 
 
+/*
+  CONN:  Attempts to connect to server w/ hostname @ port.  Returns a
+  socket file descriptor 
+*/
+
 int conn(char * hostname, int port) {
 
   int socketfd;
@@ -71,13 +76,29 @@ int conn(char * hostname, int port) {
     error("ERROR connecting");
   }
 
+  char buffer[256];
+  bzero(buffer, 256);
+
+  read(socketfd, buffer, 255);
+  printf("%s\n", buffer);
+
   return socketfd;
 }
+
+/*
+
+  DISCONN:  Closes a socket given a socket file descriptor
+*/
 
 int disconn(int socketfd) {
 
   return close(socketfd);
 }
+
+/*
+  
+  SEND: Given a socket file descriptor, sends a message
+*/
 
 int send(int socketfd, char * message) {
 
@@ -90,96 +111,3 @@ int send(int socketfd, char * message) {
   return e;
 }
 
-//REMOVE THIS
-
-/*
-int main(int argc, char *argv[]) {
-
-  int sockfd, portno, n;
-  struct sockaddr_in serv_addr;
-  struct hostent *server;
-
-  char buffer[256];  //Buffer for sending messages
-
-    if (argc < 3) {
-       fprintf(stderr,"usage %s hostname port\n", argv[0]);
-       exit(0);
-    }
-
-    portno = atoi(argv[2]);
-
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
-
-	//Ensure that host can be connected to...
-    if (sockfd < 0) 
-        error("ERROR opening socket");
-    server = gethostbyname(argv[1]);
-    if (server == NULL) {
-        fprintf(stderr,"ERROR, no such host\n");
-        exit(0);
-    }
-
-    //Connect to the SocketServer.  Look into these structs a little
-    //more so that I understand what's going on!
-    
-    bzero((char *) &serv_addr, sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
-    bcopy((char *)server->h_addr, 
-         (char *)&serv_addr.sin_addr.s_addr,
-         server->h_length);
-    serv_addr.sin_port = htons(portno);
-    if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) 
-        error("ERROR connecting");
-
-    //Double to send to Java server
-
-    double sending = 0.0;
-
-    while (1) {
-
-      //Here, the VRPN client could just receive the message and then
-      //write it onto the socket...would be an easy way to do the communications
-
-    	bzero(buffer,256);
-
-	sleep(1);
-
-	sprintf(buffer, "%lf", sending);
-
-    	n = write(sockfd,buffer,strlen(buffer));
-
-        if (n < 0) { 
-          error("ERROR writing to socket");
-        }
-    }
-
-    close(sockfd);
-    return 0;
-}
-
-*/
-
-
-/*
-int main(int argc, char * argv[]) {
-
-  if (argc < 3) {
-    fprintf(stderr,"usage %s hostname port\n", argv[0]);
-    exit(0);
-  }
-
-  char * hostname = argv[1];
-  int port = atoi(argv[2]);
-
-  int socketfd = conn(hostname, port);
-  
-  char * msg = "How are you?";
-
-  send(socketfd, msg);
-
-  disconn(socketfd);
-
-  return 0;
-}
-
-*/

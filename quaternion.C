@@ -3,7 +3,7 @@
 #include <math.h>
 #include <assert.h>
 
-//#################### QUATERNION  #######################################
+//############################## QUATERNION  ############################
 
 /*
   Paul Glotfelter
@@ -100,7 +100,7 @@ double thetaq(quaternion q) {
 
 /*
   
-  PSIQ: Returns the pitch of the quaternion in
+  PSIQ: Returns the PITCH of the quaternion in
   RADIANS
 */
 
