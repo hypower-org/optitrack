@@ -1,8 +1,8 @@
 CC=g++
 CFLAGS=-c -Wall
 LDFLAGS=-I ./ -lm -L ./vrpn/pc_linux64 -lvrpn -lvrpnserver -lpthread
-SOURCES=socket_client.C quaternion.C optitrack_driver.C
-TESTSOURCES=quaternion.C test.C 
+SOURCES=$(wildcard src/*.C)
+TESTSOURCES=./src/quaternion.C $(wildcard tests/*.C)
 OBJECTS=$(SOURCES:.cpp=.o) 
 TESTOBJECTS=$(TESTSOURCES:.cpp=.o)
 EXECUTABLE=od
@@ -22,6 +22,6 @@ clean:
 
 test: $(TESTOBJECTS)
 	$(CC) $(TESTOBJECTS) $(LDFLAGS) -o $@
-	./test 
+	./$@
 	rm -f $@
 	
